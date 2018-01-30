@@ -4,22 +4,21 @@ describe CandyCheck::PlayStore::Verification do
   subject do
     CandyCheck::PlayStore::Verification.new(client, package, product_id, token)
   end
+  let(:response) do
+    {
+      kind: 'androidpublisher#product_purchase',
+      purchase_time_millis: 1_421_676_237_413,
+      purchase_state: 0,
+      consumption_state: 0,
+      developer_payload: 'payload that gets stored and returned'
+    }
+  end
   let(:client)     { DummyGoogleClient.new(response) }
   let(:package)    { 'the_package' }
   let(:product_id) { 'the_product' }
   let(:token)      { 'the_token' }
 
   describe 'valid' do
-    let(:response) do
-      {
-        'kind' => 'androidpublisher#productPurchase',
-        'purchaseTimeMillis' => '1421676237413',
-        'purchaseState' => 0,
-        'consumptionState' => 0,
-        'developerPayload' => 'payload that gets stored and returned'
-      }
-    end
-
     it 'calls the client with the correct paramters' do
       subject.call!
       client.package.must_equal package
@@ -36,19 +35,17 @@ describe CandyCheck::PlayStore::Verification do
   end
 
   describe 'failure' do
-    let(:response) do
-      {
-        'error' => {
-          'code'    => 401,
-          'message' => 'The current user has insufficient permissions'
-        }
-      }
+    before do
+      def client.verify(_package, _product_id, _token)
+        raise Google::Apis::ClientError.new('Invalid request', status_code: 400)
+      end
     end
 
     it 'returns a verification failure' do
       result = subject.call!
       result.must_be_instance_of CandyCheck::PlayStore::VerificationFailure
-      result.code.must_equal 401
+      result.code.must_equal 400
+      result.message.must_equal 'Invalid request'
     end
   end
 
@@ -61,6 +58,7 @@ describe CandyCheck::PlayStore::Verification do
       result = subject.call!
       result.must_be_instance_of CandyCheck::PlayStore::VerificationFailure
       result.code.must_equal(-1)
+      result.message.must_equal('Malformed response')
     end
   end
 

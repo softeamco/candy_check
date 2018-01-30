@@ -30,14 +30,16 @@ module CandyCheck
         if valid?
           Receipt.new(@response)
         else
-          VerificationFailure.new(@response['error'])
+          VerificationFailure.new(Google::Apis::Error.new('Malformed response'))
         end
+      rescue Google::Apis::Error => e
+        VerificationFailure.new(e)
       end
 
       private
 
       def valid?
-        @response && @response['purchaseState'] && @response['consumptionState']
+        @response && @response[:purchase_state] && @response[:consumption_state]
       end
 
       def verify!

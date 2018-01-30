@@ -11,15 +11,17 @@ module CandyCheck
         if valid?
           Subscription.new(@response)
         else
-          VerificationFailure.new(@response['error'])
+          VerificationFailure.new(Google::Apis::Error.new('Malformed response'))
         end
+      rescue Google::Apis::Error => e
+        VerificationFailure.new(e)
       end
 
       private
 
       def valid?
-        ok_kind = @response['kind'] == 'androidpublisher#subscriptionPurchase'
-        @response && @response['expiryTimeMillis'] && ok_kind
+        ok_kind = @response[:kind] == 'androidpublisher#subscriptionPurchase'
+        @response && @response[:expiry_time_millis] && ok_kind
       end
 
       def verify!

@@ -33,12 +33,8 @@ module CandyCheck
       # by fetching an access token.
       # If the config has a cache_file the client tries to load discovery
       def boot!
-        @api_client = Google::APIClient.new(
-          application_name:    config.application_name,
-          application_version: config.application_version,
-          user_agent: user_agent
-        )
-        discover!
+        @api_client =
+          Google::Apis::AndroidpublisherV2::AndroidPublisherService.new
         authorize!
       end
 
@@ -49,12 +45,7 @@ module CandyCheck
       # @param token [String] the purchase token
       # @return [Hash] result of the API call
       def verify(package, product_id, token)
-        parameters = {
-          'packageName' => package,
-          'productId'   => product_id,
-          'token'       => token
-        }
-        execute(parameters, rpc.purchases.products.get)
+        api_client.get_purchase_product(package, product_id, token).to_h
       end
 
       # Calls the remote API to load the product information for a specific
@@ -64,50 +55,13 @@ module CandyCheck
       # @param token [String] the purchase token
       # @return [Hash] result of the API call
       def verify_subscription(package, subscription_id, token)
-        parameters = {
-          'packageName'    => package,
-          'subscriptionId' => subscription_id,
-          'token'          => token
-        }
-        execute(parameters, rpc.purchases.subscriptions.get)
+        api_client
+          .get_purchase_subscription(package, subscription_id, token).to_h
       end
 
       private
 
       attr_reader :config, :api_client, :rpc
-
-      # Execute api call through the API Client's HTTP command class
-      # @param parameters [hash] the parameters to send to the command
-      # @param api_method [Method] which api method to call
-      # @return [hash] the data response, as a hash
-      def execute(parameters, api_method)
-        api_client.execute(
-          api_method: api_method,
-          parameters: parameters
-        ).data.to_hash
-      end
-
-      # Builds a custom user agent to prevent Google::APIClient to
-      # use an invalid auto-generated one
-      # @see https://github.com/google/google-api-ruby-client/blob/15853007bf1fc8ad000bb35dafdd3ca6bfa8ae26/lib/google/api_client.rb#L112
-      def user_agent
-        [
-          "#{config.application_name}/#{config.application_version}",
-          "google-api-ruby-client/#{Google::APIClient::VERSION::STRING}",
-          Google::APIClient::ENV::OS_VERSION,
-          '(gzip)'
-        ].join(' ').delete("\n")
-      end
-
-      def discover!
-        @rpc = load_discover_dump || request_discover
-        validate_rpc!
-        write_discover_dump
-      end
-
-      def request_discover
-        api_client.discovered_api(API_DISCOVER, API_VERSION)
-      end
 
       def authorize!
         api_client.authorization = Signet::OAuth2::Client.new(
@@ -118,21 +72,6 @@ module CandyCheck
           signing_key:          config.api_key
         )
         api_client.authorization.fetch_access_token!
-      end
-
-      def validate_rpc!
-        return if rpc.purchases.products.get
-        raise DiscoveryError, 'Unable to get the API discovery'
-      rescue NoMethodError
-        raise DiscoveryError, 'Unable to get the API discovery'
-      end
-
-      def load_discover_dump
-        DiscoveryRepository.new(config.cache_file).load
-      end
-
-      def write_discover_dump
-        DiscoveryRepository.new(config.cache_file).save(rpc)
       end
     end
   end

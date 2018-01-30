@@ -10,8 +10,6 @@ describe CandyCheck::PlayStore::Client do
 
   let(:config) do
     CandyCheck::PlayStore::Config.new(
-      application_name: 'demo_app',
-      application_version: '1.0',
       issuer: 'test_issuer',
       key_file: fixture_path('play_store', 'dummy.p12'),
       cache_file: cache_file_path,
@@ -19,34 +17,7 @@ describe CandyCheck::PlayStore::Client do
     )
   end
 
-  describe 'discovery' do
-    describe 'w/o cache file' do
-      it 'boot loads and dumps discovery file' do
-        mock_discovery!('discovery.txt')
-        mock_authorize!('auth_success.txt')
-        subject.boot!
-        File.exist?(cache_file_path).must_be_true
-      end
-
-      it 'fails if discovery fails' do
-        mock_discovery!('empty.txt')
-        proc { subject.boot! }.must_raise \
-          CandyCheck::PlayStore::Client::DiscoveryError
-      end
-    end
-
-    describe 'with cache file' do
-      let(:cache_file_path) { fixture_path('play_store', 'api_cache.dump') }
-
-      it 'loads the discovery from cache file' do
-        mock_authorize!('auth_success.txt')
-        subject.boot!
-      end
-    end
-  end
-
   it 'fails if authentication fails' do
-    mock_discovery!('discovery.txt')
     mock_authorize!('auth_failure.txt')
     proc { subject.boot! }.must_raise Signet::AuthorizationError
   end
@@ -55,13 +26,8 @@ describe CandyCheck::PlayStore::Client do
     bootup!
 
     mock_request!('products_failure.txt')
-    result = subject.verify('the_package', 'the_id', 'the_token')
-    result.must_be_instance_of Hash
-
-    result['error']['code'].must_equal 401
-    result['error']['message'].must_equal 'The current user has insufficient' \
-      ' permissions to perform the requested operation.'
-    result['error']['errors'].size.must_equal 1
+    -> { subject.verify('the_package', 'the_id', 'the_token') }
+      .must_raise Google::Apis::AuthorizationError
   end
 
   it 'returns the products call result\'s data even if it is a failure' \
@@ -69,13 +35,8 @@ describe CandyCheck::PlayStore::Client do
     bootup!
 
     mock_subscriptions_request!('products_failure.txt')
-    result = subject.verify_subscription('the_package', 'the_id', 'the_token')
-    result.must_be_instance_of Hash
-
-    result['error']['code'].must_equal 401
-    result['error']['message'].must_equal 'The current user has insufficient' \
-      ' permissions to perform the requested operation.'
-    result['error']['errors'].size.must_equal 1
+    -> { subject.verify_subscription('the_package', 'the_id', 'the_token') }
+      .must_raise Google::Apis::AuthorizationError
   end
 
   it 'returns the products call result\'s data for a successful call' do
@@ -83,26 +44,19 @@ describe CandyCheck::PlayStore::Client do
     mock_request!('products_success.txt')
     result = subject.verify('the_package', 'the_id', 'the_token')
     result.must_be_instance_of Hash
-    result['purchaseState'].must_equal 0
-    result['consumptionState'].must_equal 0
-    result['developerPayload'].must_equal \
+    result[:purchase_state].must_equal 0
+    result[:consumption_state].must_equal 0
+    result[:developer_payload].must_equal \
       'payload that gets stored and returned'
-    result['purchaseTimeMillis'].must_equal '1421676237413'
-    result['kind'].must_equal 'androidpublisher#productPurchase'
+    result[:purchase_time_millis].must_equal 1_421_676_237_413
+    result[:kind].must_equal 'androidpublisher#productPurchase'
   end
 
   private
 
   def bootup!
-    mock_discovery!('discovery.txt')
     mock_authorize!('auth_success.txt')
     subject.boot!
-  end
-
-  def mock_discovery!(file)
-    stub_request(:get, 'https://www.googleapis.com/discovery/' \
-                       'v1/apis/androidpublisher/v2/rest')
-      .to_return(fixture_content('play_store', file))
   end
 
   def mock_authorize!(file)

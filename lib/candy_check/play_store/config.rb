@@ -40,8 +40,6 @@ module CandyCheck
       private
 
       def validate!
-        validates_presence(:application_name)
-        validates_presence(:application_version)
         validates_presence(:issuer)
         validates_presence(:key_file)
         validates_presence(:key_secret)

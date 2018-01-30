@@ -1,15 +1,14 @@
 require 'spec_helper'
 
 describe CandyCheck::PlayStore::VerificationFailure do
-  subject { CandyCheck::PlayStore::VerificationFailure.new(attributes) }
+  subject { CandyCheck::PlayStore::VerificationFailure.new(err) }
 
   describe 'denied' do
-    let(:attributes) do
-      {
-        'errors'  => [],
-        'code'    => 401,
-        'message' => 'The current user has insufficient permissions'
-      }
+    let(:err) do
+      Google::Apis::AuthorizationError.new(
+        'The current user has insufficient permissions',
+        status_code: 401
+      )
     end
 
     it 'returns the code' do
@@ -22,7 +21,7 @@ describe CandyCheck::PlayStore::VerificationFailure do
   end
 
   describe 'empty' do
-    let(:attributes) { nil }
+    let(:err) { nil }
 
     it 'returns an unknown code' do
       subject.code.must_equal(-1)
