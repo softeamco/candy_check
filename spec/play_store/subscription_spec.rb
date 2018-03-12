@@ -121,9 +121,9 @@ describe CandyCheck::PlayStore::Subscription do
   describe 'trial' do
     let(:attributes) do
       {
-        payment_state: 1,
+        payment_state: 2,
         price_currency_code: 'SOMECODE',
-        price_amount_micros: 0
+        price_amount_micros: 1_000_000
       }
     end
 
