@@ -133,6 +133,12 @@ module CandyCheck
       def expires_at
         read_datetime_from_millis(:expiry_time_millis)
       end
+
+      # Get cancelation time in UTC
+      # @return [DateTime]
+      def canceled_at
+        read_datetime_from_millis(:user_cancellation_time_millis)
+      end
     end
   end
 end
