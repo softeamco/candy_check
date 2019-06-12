@@ -113,8 +113,8 @@ describe CandyCheck::AppStore::Unified::InAppReceipt do
     subject.auto_renew_status.must_equal 0
   end
 
-  it 'check auto_renew?' do
-    subject.auto_renew?.must_equal false
+  it 'check will_renew?' do
+    subject.will_renew?.must_equal false
   end
 
   it 'returns price_consent_status' do

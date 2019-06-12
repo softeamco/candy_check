@@ -106,10 +106,22 @@ module CandyCheck
           read_bool('is_trial_period')
         end
 
+        # For a subscription, whether or not it is in the intro offer period
+        # @return [Boolean, nil]
+        def is_intro_period # rubocop:disable PredicateName
+          read_bool('is_in_intro_offer_period')
+        end
+
         # For a subscription, whether or not it is in the free trial period
         # @return [Boolean]
         def trial_period?
           !is_trial_period.nil? && is_trial_period
+        end
+
+        # For a subscription, whether or not it is in the intro offer period
+        # @return [Boolean]
+        def intro_period?
+          !is_intro_period.nil? && is_intro_period
         end
 
         # Check if subscription was canceled by Apple customer support
@@ -183,7 +195,7 @@ module CandyCheck
 
         # The current renewal status for the auto-renewable subscription
         # @return [Boolean]
-        def auto_renew?
+        def will_renew?
           auto_renew_status == 1
         end
 
