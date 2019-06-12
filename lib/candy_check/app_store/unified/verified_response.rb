@@ -63,11 +63,10 @@ module CandyCheck
         end
 
         # @return [Unified::InAppReceipt, nil] the pending renewal transaction
-        #   for subscription identified by
-        #   {latest_transaction.original_transaction_id}.
+        #   for subscription identified by original_transaction_id
         #   Present only for auto-renewable subscription.
         def pending_renewal_transaction(original_transaction_id)
-          return unless latest_transaction
+          return unless subscription?
 
           pending_renewal_info.find do |transaction|
             transaction.original_transaction_id == original_transaction_id
