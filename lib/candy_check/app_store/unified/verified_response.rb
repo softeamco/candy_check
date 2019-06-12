@@ -55,6 +55,13 @@ module CandyCheck
           end
         end
 
+        # @return [Unified::InAppReceipt] by original_transaction_id
+        def latest_subscription_info(original_transaction_id)
+          latest_receipt_info.select do |receipt|
+            receipt.original_transaction_id == original_transaction_id
+          end.sort_by(&:purchase_date).reverse.first
+        end
+
         # @return [Unified::InAppReceipt, nil] the pending renewal transaction
         #   for subscription identified by
         #   {latest_transaction.original_transaction_id}.
