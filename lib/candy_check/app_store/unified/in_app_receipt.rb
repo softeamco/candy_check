@@ -112,6 +112,20 @@ module CandyCheck
           !is_trial_period.nil? && is_trial_period
         end
 
+        # Check if subscription was canceled by Apple customer support
+        # It makes sense only for subscriptions.
+        # @return [Boolean]
+        def cancelled?
+          !cancellation_date.nil?
+        end
+
+        # Check if the {#expires_at} is passed.
+        # It makes sense only for subscriptions.
+        # @return [Boolean]
+        def expired?
+          expires_date.to_time <= Time.now.utc
+        end
+
         # For a transaction that was canceled by Apple customer support,
         # the time and date of the cancellation
         # @return [DateTime, nil]

@@ -7,25 +7,25 @@ describe CandyCheck::AppStore::Receipt do
     {
       'original_purchase_date_pst' => '2015-01-08 03:40:46' \
                                       ' America/Los_Angeles',
-      'purchase_date_ms'           => '1420803646868',
-      'unique_identifier'          => 'some_uniq_identifier_from_apple' \
+      'purchase_date_ms' => '1420803646868',
+      'unique_identifier' => 'some_uniq_identifier_from_apple' \
                                       '_for_this',
-      'original_transaction_id'    => 'some_original_transaction_id',
-      'bvrs'                       => '2.0',
-      'transaction_id'             => 'some_transaction_id',
-      'quantity'                   => '1',
-      'unique_vendor_identifier'   => '00000000-1111-2222-3333-' \
+      'original_transaction_id' => 'some_original_transaction_id',
+      'bvrs' => '2.0',
+      'transaction_id' => 'some_transaction_id',
+      'quantity' => '1',
+      'unique_vendor_identifier' => '00000000-1111-2222-3333-' \
                                       '444444444444',
-      'item_id'                    => 'some_item_id',
-      'product_id'                 => 'some_product',
-      'purchase_date'              => '2015-01-09 11:40:46 Etc/GMT',
-      'original_purchase_date'     => '2015-01-08 11:40:46 Etc/GMT',
-      'purchase_date_pst'          => '2015-01-09 03:40:46' \
+      'item_id' => 'some_item_id',
+      'product_id' => 'some_product',
+      'purchase_date' => '2015-01-09 11:40:46 Etc/GMT',
+      'original_purchase_date' => '2015-01-08 11:40:46 Etc/GMT',
+      'purchase_date_pst' => '2015-01-09 03:40:46' \
                                       ' America/Los_Angeles',
-      'bid'                        => 'some.test.app',
-      'original_purchase_date_ms'  => '1420717246868',
-      'expires_date'               => '2016-06-09 13:59:40 Etc/GMT',
-      'is_trial_period'            => 'false'
+      'bid' => 'some.test.app',
+      'original_purchase_date_ms' => '1420717246868',
+      'expires_date' => '2016-06-09 13:59:40 Etc/GMT',
+      'is_trial_period' => 'false'
     }
   end
 

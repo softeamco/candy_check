@@ -47,7 +47,7 @@ describe CandyCheck::AppStore::Client do
         .with(
           body: {
             'receipt-data' => receipt_data,
-            'password'     => password
+            'password' => password
           }
         )
         .to_return(

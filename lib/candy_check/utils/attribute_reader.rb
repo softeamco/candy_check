@@ -23,6 +23,7 @@ module CandyCheck
       def read_bool(field)
         val = read(field).to_s
         return nil unless %w(false true).include?(val)
+
         val == 'true'
       end
 

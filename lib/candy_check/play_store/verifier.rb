@@ -58,6 +58,7 @@ module CandyCheck
 
       def check_boot!
         return if booted?
+
         boot_error 'You need to boot the verifier service first: '\
                    'CandyCheck::PlayStore::Verifier#boot!'
       end

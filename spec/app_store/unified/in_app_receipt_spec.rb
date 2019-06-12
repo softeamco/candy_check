@@ -1,4 +1,3 @@
-
 require 'spec_helper'
 
 describe CandyCheck::AppStore::Unified::InAppReceipt do
@@ -124,5 +123,13 @@ describe CandyCheck::AppStore::Unified::InAppReceipt do
 
   it 'check price_consented?' do
     subject.price_consented?.must_equal true
+  end
+
+  it 'check expired?' do
+    subject.expired?.must_equal true
+  end
+
+  it 'cancelled?' do
+    subject.cancelled?.must_equal true
   end
 end

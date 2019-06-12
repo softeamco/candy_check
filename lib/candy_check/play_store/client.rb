@@ -66,10 +66,10 @@ module CandyCheck
       def authorize!
         api_client.authorization = Signet::OAuth2::Client.new(
           token_credential_uri: API_URL,
-          audience:             API_URL,
-          scope:                API_SCOPE,
-          issuer:               config.issuer,
-          signing_key:          config.api_key
+          audience: API_URL,
+          scope: API_SCOPE,
+          issuer: config.issuer,
+          signing_key: config.api_key
         )
         api_client.authorization.fetch_access_token!
       end
