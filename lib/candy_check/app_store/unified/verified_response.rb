@@ -51,20 +51,13 @@ module CandyCheck
 
           latest_receipt_info.group_by(&:original_transaction_id)
                              .map do |_id, receipts|
-            receipts.sort_by(&:purchase_date).last
+            receipts.sort_by(&:purchase_date)
           end
         end
 
         # @return [Unified::InAppReceipt] by original_transaction_id
         def latest_subscription_info(original_transaction_id)
           transactions(original_transaction_id)&.last
-        end
-
-        # @return [<Unified::InAppReceipt>] by original_transaction_id
-        def transactions(original_transaction_id)
-          latest_receipt_info.select do |receipt|
-            receipt.original_transaction_id == original_transaction_id
-          end.sort_by(&:purchase_date)
         end
 
         # @return [Unified::InAppReceipt, nil] the pending renewal transaction
