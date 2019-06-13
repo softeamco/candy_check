@@ -189,5 +189,9 @@ describe CandyCheck::AppStore::Unified::VerifiedResponse do
       subject.pending_renewal_transaction('1000800359115195').must_be_instance_of(in_app_class)
       subject.pending_renewal_transaction('1000800359115195').is_in_billing_retry_period.must_equal 0
     end
+
+    it '#transactions' do
+      subject.transactions('1000800359115195').size.must_equal 2
+    end
   end
 end
