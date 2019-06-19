@@ -18,10 +18,6 @@ module CandyCheck
         #   Present only for auto-renewable subscription.
         attr_reader :pending_renewal_info
 
-        # @return [DateTime, nil] the expiration date for subscription.
-        #   Present only for auto-renewable subscription.
-        attr_reader :expires_at
-
         # @return [<Unified::InAppReceipt>] the collection containing all
         #   in-app purchase transactions. This excludes transactions for
         #   a consumable product that have been marked as finished by your app.
