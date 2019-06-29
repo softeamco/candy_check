@@ -69,12 +69,11 @@ module CandyCheck
         end
 
         EXPIRATION_INTENTS = {
-          1 => 'Customer canceled their subscription.',
-          2 => 'Billing error; for example customer’s payment information' \
-               ' was no longer valid.',
-          3 => 'Customer did not agree to a recent price increase.',
-          4 => 'Product was not available for purchase at the time of renewal.',
-          5 => 'Unknown error.'
+          1 => 'settings_cancellation',
+          2 => 'billing_error',
+          3 => 'declined_price_increase',
+          4 => 'unavailable_product',
+          5 => 'unknown_error'
         }.freeze
 
         # For an expired subscription, the reason for the subscription
@@ -152,10 +151,8 @@ module CandyCheck
         end
 
         CANCELATION_REASONS = {
-          1 => 'Customer canceled their transaction due to an actual' \
-               ' or perceived issue within your app.',
-          0 => 'Transaction was canceled for another reason, for example, if' \
-               ' the customer made the purchase accidentally.'
+          1 => 'app_issue',
+          0 => 'purchase_accidentally'
         }.freeze
 
         # For a transaction that was cancelled, the reason for cancellation
