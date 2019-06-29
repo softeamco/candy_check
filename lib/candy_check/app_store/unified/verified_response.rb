@@ -51,6 +51,12 @@ module CandyCheck
           end
         end
 
+        def latest_receipt_info_by(original_transaction_id)
+          latest_receipt_info.select do |receipt|
+            receipt.original_transaction_id == original_transaction_id
+          end
+        end
+
         # @return [Unified::InAppReceipt] by original_transaction_id
         def latest_subscription_info(original_transaction_id)
           subscriptions.find { |s| s.original_transaction_id == original_transaction_id }
