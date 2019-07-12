@@ -69,8 +69,8 @@ module CandyCheck
         end
 
         EXPIRATION_INTENTS = {
-          1 => 'settings_cancellation',
-          2 => 'billing_error',
+          1 => 'user_canceled',
+          2 => 'billing_issue',
           3 => 'declined_price_increase',
           4 => 'unavailable_product',
           5 => 'unknown_error'
@@ -152,7 +152,7 @@ module CandyCheck
 
         CANCELATION_REASONS = {
           1 => 'app_issue',
-          0 => 'purchase_accidentally'
+          0 => 'another_reason'
         }.freeze
 
         # For a transaction that was cancelled, the reason for cancellation
@@ -211,6 +211,15 @@ module CandyCheck
         #       Subscription will renew at the higher price.
         def price_consent_status
           read_integer('price_consent_status')
+        end
+
+        PRICE_CONSENTS_STATUS = {
+          1 => 'ignore_price_increase',
+          0 => 'agreed_price_increase'
+        }.freeze
+
+        def price_consent_status_string
+          PRICE_CONSENTS_STATUS[price_consent_status]
         end
 
         # The current price consent status for a subscription price increase.
