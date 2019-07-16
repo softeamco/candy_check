@@ -127,7 +127,7 @@ module CandyCheck
         # It makes sense only for subscriptions.
         # @return [Boolean]
         def cancelled?
-          !cancellation_date.nil?
+          !cancellation_date.nil? && cancellation_reason.present?
         end
 
         # Check if the {#expires_at} is passed.
