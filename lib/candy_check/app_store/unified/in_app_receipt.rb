@@ -118,6 +118,12 @@ module CandyCheck
           read_bool('is_in_intro_offer_period')
         end
 
+        # For a subscription, whether or not it is in the promotional offer
+        # @return [Boolean]
+        def promo_offer?
+          promotional_offer_id.present?
+        end
+
         # For a subscription, whether or not it is in the free trial period
         # @return [Boolean]
         def trial_period?
