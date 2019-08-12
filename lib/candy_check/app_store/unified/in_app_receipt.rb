@@ -41,6 +41,13 @@ module CandyCheck
           read('original_transaction_id')
         end
 
+        # A string that the App Store uses to uniquely identify the
+        # promotional offer of a product
+        # @return [String, nil]
+        def promotional_offer_id
+          read('promotional_offer_id')
+        end
+
         # The date and time that the item was purchased
         # @return [DateTime, nil]
         def purchase_date
