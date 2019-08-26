@@ -25,6 +25,9 @@ module CandyCheck
         #   and non-consumable products
         attr_reader :in_app
 
+        # @return [String] Enviroment
+        attr_reader :environment
+
         # @param response [Hash] parsed response from apple
         #   verification server
         def initialize(response)
@@ -32,6 +35,7 @@ module CandyCheck
           @latest_receipt_info = fetch_latest_receipt_info(response)
           @pending_renewal_info = fetch_pending_renewal_info(response)
           @in_app = fetch_in_app_info(response)
+          @environment = response['environment'].downcase
         end
 
         # Check if response includes subscription
