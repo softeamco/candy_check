@@ -68,6 +68,13 @@ module CandyCheck
           read_datetime_from_string('expires_date')
         end
 
+        # The grace date for the subscription.
+        # Present only for auto-renewable subscription receipts
+        # @return [DateTime, nil]
+        def grace_period_expires_date
+          read_datetime_from_string('grace_period_expires_date')
+        end
+
         # For an expired subscription, the reason for the subscription
         # expiration
         # @return [Integer, nil]
