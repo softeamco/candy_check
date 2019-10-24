@@ -125,6 +125,10 @@ module CandyCheck
           read_bool('is_upgraded')
         end
 
+        def upgraded?
+          !is_upgraded.nil? && is_upgraded
+        end
+        
         # For a subscription, whether or not it is in the intro offer period
         # @return [Boolean, nil]
         def is_intro_period # rubocop:disable PredicateName
