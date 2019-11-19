@@ -50,8 +50,21 @@ module CandyCheck
           return [] unless subscription?
 
           latest_receipt_info.group_by(&:original_transaction_id)
-                             .map do |id, receipts|
-            receipts.sort_by(&:purchase_date).last
+                             .map do |_id, receipts|
+            receipts.max_by(&:purchase_date)
+          end
+        end
+
+        def receipt_by(original_transaction_id)
+          found_receipt = latest_receipt_info_by(original_transaction_id)
+          found_receipt ||= in_app_receipt_by(original_transaction_id)
+
+          found_receipt
+        end
+
+        def in_app_receipt_by(original_transaction_id)
+          in_app.select do |receipt|
+            receipt.original_transaction_id == original_transaction_id
           end
         end
 

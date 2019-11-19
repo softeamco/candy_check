@@ -118,7 +118,7 @@ module CandyCheck
         def is_trial_period # rubocop:disable PredicateName
           read_bool('is_trial_period')
         end
-        
+
         # For a subscription, whether or not it is upgrared
         # @return [Boolean, nil]
         def is_upgraded # rubocop:disable PredicateName
@@ -128,7 +128,7 @@ module CandyCheck
         def upgraded?
           !is_upgraded.nil? && is_upgraded
         end
-        
+
         # For a subscription, whether or not it is in the intro offer period
         # @return [Boolean, nil]
         def is_intro_period # rubocop:disable PredicateName
