@@ -55,20 +55,20 @@ module CandyCheck
           end
         end
 
-        def receipt_by(original_transaction_id)
-          found_receipt = latest_receipt_info_by(original_transaction_id)
-          found_receipt ||= in_app_receipt_by(original_transaction_id)
+        def receipts_by(original_transaction_id)
+          found_receipt = latest_receipts_by(original_transaction_id)
+          found_receipt ||= in_app_receipts_by(original_transaction_id)
 
           found_receipt
         end
 
-        def in_app_receipt_by(original_transaction_id)
+        def in_app_receipts_by(original_transaction_id)
           in_app.select do |receipt|
             receipt.original_transaction_id == original_transaction_id
           end
         end
 
-        def latest_receipt_info_by(original_transaction_id)
+        def latest_receipts_by(original_transaction_id)
           latest_receipt_info.select do |receipt|
             receipt.original_transaction_id == original_transaction_id
           end
