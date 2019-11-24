@@ -48,6 +48,10 @@ module CandyCheck
           read('promotional_offer_id')
         end
 
+        def subscription_group_identifier
+          read('subscription_group_identifier')
+        end
+
         # The date and time that the item was purchased
         # @return [DateTime, nil]
         def purchase_date
