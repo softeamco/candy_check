@@ -93,6 +93,14 @@ module CandyCheck
           end
         end
 
+        def pending_renewal_transaction(oti, product_id)
+          return unless subscription?
+
+          pending_renewal_info.find do |t|
+            t.original_transaction_id == oti || t.product_id == product_id
+          end
+        end
+
         private
 
         def fetch_in_app_info(response)
