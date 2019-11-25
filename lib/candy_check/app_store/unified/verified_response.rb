@@ -58,6 +58,40 @@ module CandyCheck
           end
         end
 
+        def subscription_receipts_by(original_transaction_id)
+          grouped_receipts[:original_transaction_id]
+        end
+
+        # group by subscription_group_identifier or by original_transaction_id or by product_id
+        def grouped_receipts
+          @grouped_receipts ||= raw_grouped_receipts.map do |id, receipts|
+            { id => receipts.sort_by(&:purchase_date) }
+          end.reduce({}, :merge)
+        end
+      
+        def same_group?(r1, r2)
+          return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present?
+      
+          r1.original_transaction_id == r2.original_transaction_id || r1.product_id == r2.product_id
+        end
+      
+        def raw_grouped_receipts
+          groups = {}
+          latest_receipt_info.each do |candy_receipt|
+            added = false
+            groups.each do |oti, receipts|
+              if same_group?(receipts.first, candy_receipt)        
+                receipts << candy_receipt
+                added = true
+                break
+              end
+            end
+            groups[candy_receipt.original_transaction_id] = [candy_receipt] unless added
+          end
+      
+          groups
+        end
+
         def receipts_by(original_transaction_id)
           found_receipt = latest_receipts_by(original_transaction_id)
           found_receipt ||= in_app_receipts_by(original_transaction_id)
