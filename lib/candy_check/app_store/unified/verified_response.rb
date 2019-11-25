@@ -28,13 +28,10 @@ module CandyCheck
         # @return [String] Enviroment
         attr_reader :environment
 
-        attr_reader :response_hash
-
         # @param response [Hash] parsed response from apple
         #   verification server
         def initialize(response)
           @receipt = AppReceipt.new(response['receipt'])
-          @response_hash = response
           @latest_receipt_info = fetch_latest_receipt_info(response)
           @pending_renewal_info = fetch_pending_renewal_info(response)
           @in_app = fetch_in_app_info(response)
