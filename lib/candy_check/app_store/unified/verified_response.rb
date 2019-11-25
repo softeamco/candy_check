@@ -59,7 +59,7 @@ module CandyCheck
         end
 
         def subscription_receipts_by(original_transaction_id)
-          grouped_receipts[:original_transaction_id]
+          grouped_receipts[original_transaction_id]
         end
 
         # group by subscription_group_identifier or by original_transaction_id or by product_id
