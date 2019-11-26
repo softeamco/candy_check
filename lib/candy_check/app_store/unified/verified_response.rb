@@ -67,7 +67,7 @@ module CandyCheck
         end
       
         def same_group?(r1, r2)
-          return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present?
+          return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
       
           r1.original_transaction_id == r2.original_transaction_id || r1.product_id == r2.product_id
         end
