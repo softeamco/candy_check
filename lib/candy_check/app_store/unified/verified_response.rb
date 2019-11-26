@@ -74,7 +74,7 @@ module CandyCheck
       
         def raw_grouped_receipts
           groups = {}
-          latest_receipt_info.each do |candy_receipt|
+          total_receipts.each do |candy_receipt|
             added = false
             groups.each do |oti, receipts|
               if same_group?(receipts.first, candy_receipt)        
@@ -89,39 +89,16 @@ module CandyCheck
           groups
         end
 
-        def receipts_by(original_transaction_id)
-          found_receipt = latest_receipts_by(original_transaction_id)
-          found_receipt ||= in_app_receipts_by(original_transaction_id)
+        def total_receipts
 
-          found_receipt
-        end
+          return @total_receipts if @total_receipts
 
-        def in_app_receipts_by(original_transaction_id)
-          in_app.select do |receipt|
-            receipt.original_transaction_id == original_transaction_id
-          end
-        end
-
-        def latest_receipts_by(original_transaction_id)
-          latest_receipt_info.select do |receipt|
-            receipt.original_transaction_id == original_transaction_id
-          end
-        end
-
-        # @return [Unified::InAppReceipt] by original_transaction_id
-        def latest_subscription_info(original_transaction_id)
-          subscriptions.find { |s| s.original_transaction_id == original_transaction_id }
-        end
-
-        # @return [Unified::InAppReceipt, nil] the pending renewal transaction
-        #   for subscription identified by original_transaction_id
-        #   Present only for auto-renewable subscription.
-        def pending_renewal_transaction(original_transaction_id)
-          return unless subscription?
-
-          pending_renewal_info.find do |transaction|
-            transaction.original_transaction_id == original_transaction_id
-          end
+          @total_receipts = []
+          @total_receipts += latest_receipt_info
+          not_added_in_app_receipts = in_app.select { |r| @total_receipts.find { |r2| r2.transaction_id == r.transaction_id} == nil }
+          @total_receipts += not_added_in_app_receipts if not_added_in_app_receipts.present?
+          
+          @total_receipts
         end
 
         def pending_renewal_transaction(oti, product_id)
@@ -130,6 +107,11 @@ module CandyCheck
           pending_renewal_info.find do |t|
             t.original_transaction_id == oti || t.product_id == product_id
           end
+        end
+        
+        # @return [Unified::InAppReceipt] by original_transaction_id
+        def latest_subscription_info(original_transaction_id)
+          subscriptions.find { |s| s.original_transaction_id == original_transaction_id }
         end
 
         private

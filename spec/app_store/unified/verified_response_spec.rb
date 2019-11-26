@@ -186,8 +186,8 @@ describe CandyCheck::AppStore::Unified::VerifiedResponse do
     end
 
     it '#pending_renewal_transaction' do
-      subject.pending_renewal_transaction('1000800359115195').must_be_instance_of(in_app_class)
-      subject.pending_renewal_transaction('1000800359115195').is_in_billing_retry_period.must_equal 0
+      subject.pending_renewal_transaction('1000800359115195', nil).must_be_instance_of(in_app_class)
+      subject.pending_renewal_transaction('1000800359115195', nil).is_in_billing_retry_period.must_equal 0
     end
   end
 end
