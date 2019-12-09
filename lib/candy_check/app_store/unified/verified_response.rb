@@ -95,10 +95,17 @@ module CandyCheck
 
           @total_receipts = []
           @total_receipts += latest_receipt_info
-          not_added_in_app_receipts = in_app.select { |r| @total_receipts.find { |r2| r2.transaction_id == r.transaction_id} == nil }
+          not_added_in_app_receipts = in_app.select { |r1| @total_receipts.find { |r2| same_receipts?(r1, r2)} == nil }
           @total_receipts += not_added_in_app_receipts if not_added_in_app_receipts.present?
           
           @total_receipts
+        end
+
+        def same_receipts?(r1, r2)
+          return r1.web_order_line_item_id == r2.web_order_line_item_id if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+          
+          # if receipts are non-renewing, then compare by transaction id
+          r1.transaction_id == r2.transaction_id
         end
 
         def pending_renewal_transaction(oti, product_id)
