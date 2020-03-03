@@ -34,6 +34,7 @@ module CandyCheck
       def build_http_connector
         Net::HTTP.new(@uri.host, @uri.port).tap do |net|
           net.use_ssl = true
+          net.read_timeout = 15
           net.verify_mode = OpenSSL::SSL::VERIFY_PEER
         end
       end
