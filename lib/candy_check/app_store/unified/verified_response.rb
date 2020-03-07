@@ -62,10 +62,25 @@ module CandyCheck
         # group by subscription_group_identifier or by original_transaction_id or by product_id
         def grouped_receipts
           @grouped_receipts ||= raw_grouped_receipts.map do |id, receipts|
-            { id => receipts.sort_by{ |r| r.cancellation_date.nil? ? r.purchase_date : [r.cancellation_date, r.purchase_date].min} }
+            receipts = receipts.sort_by(&:purchase_date)
+            fix_receipts_order!(receipts) if receipts.last.upgraded? && receipts.last.cancelled?
+
+            { id => receipts }
           end.reduce({}, :merge)
         end
       
+        def fix_receipts_order!(receipts)
+          return if receipts.count < 2
+
+          last_receipt = receipts.last
+          should_be_last_receipt = receipts[receipts.count - 2]
+          
+          if (should_be_last_receipt.purchase_date - last_receipt.cancellation_date).abs < 10
+            receipts.delete(should_be_last_receipt)
+            receipts << should_be_last_receipt
+          end
+        end
+
         def same_group?(r1, r2)
           return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
       
