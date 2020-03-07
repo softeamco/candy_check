@@ -62,7 +62,7 @@ module CandyCheck
         # group by subscription_group_identifier or by original_transaction_id or by product_id
         def grouped_receipts
           @grouped_receipts ||= raw_grouped_receipts.map do |id, receipts|
-            { id => receipts.sort_by(&:purchase_date) }
+            { id => receipts.sort_by{ |r| r.cancellation_date.nil? ? r.purchase_date : [r.cancellation_date, r.purchase_date].min} }
           end.reduce({}, :merge)
         end
       
