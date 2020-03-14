@@ -82,10 +82,12 @@ module CandyCheck
         end
 
         def same_group?(r1, r2)
+
+          # group by subscription_group_identifier if autorenewable
           return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
           
-          # group by product id only autorenewable transactions, non-renewable do not group by product id, because we don't support grouping nonrenewing transactions
-          return r1.product_id == r2.product_id if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+          # group by product id or OTI if autorenewable but for some reason subscription_group_identifier is not available
+          return (r1.product_id == r2.product_id || r1.original_transaction_id == r2.original_transaction_id) if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
 
           r1.original_transaction_id == r2.original_transaction_id 
         end
