@@ -164,13 +164,12 @@ module CandyCheck
           !cancellation_date.nil? && cancellation_reason.present?
         end
 
-        def full_refunded?
-          return false unless cancelled?
-          return true unless upgraded?
+        def upgrade_with_full_refund?
+          return false unless cancelled? && upgraded?
           
           days_used = (cancellation_date.to_date - purchase_date.to_date).to_i
 
-          !days_used.positive?
+          days_used < 1
         end
 
         # Check if the {#expires_at} is passed.
