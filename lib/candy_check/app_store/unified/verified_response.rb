@@ -6,6 +6,9 @@ module CandyCheck
         # @return [Unified::AppReceipt]
         attr_reader :receipt
 
+        # @return [String] the base64 string with receipt
+        attr_reader :latest_receipt
+
         # @return [<Unified::InAppReceipt>] the collection containing all
         #   in-app purchase transactions. This excludes transactions for
         #   a consumable product that have been marked as finished by your app.
@@ -32,6 +35,7 @@ module CandyCheck
         #   verification server
         def initialize(response)
           @receipt = AppReceipt.new(response['receipt'])
+          @latest_receipt = response['latest_receipt']
           @latest_receipt_info = fetch_latest_receipt_info(response)
           @pending_renewal_info = fetch_pending_renewal_info(response)
           @in_app = fetch_in_app_info(response)
@@ -68,13 +72,13 @@ module CandyCheck
             { id => receipts }
           end.reduce({}, :merge)
         end
-      
+
         def fix_receipts_order!(receipts)
           return if receipts.count < 2
 
           last_receipt = receipts.last
           should_be_last_receipt = receipts[receipts.count - 2]
-          
+
           if (should_be_last_receipt.purchase_date - last_receipt.cancellation_date).abs < 10
             receipts.delete(should_be_last_receipt)
             receipts << should_be_last_receipt
@@ -85,19 +89,19 @@ module CandyCheck
 
           # group by subscription_group_identifier if autorenewable
           return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
-          
+
           # group by product id or OTI if autorenewable but for some reason subscription_group_identifier is not available
           return (r1.product_id == r2.product_id || r1.original_transaction_id == r2.original_transaction_id) if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
 
-          r1.original_transaction_id == r2.original_transaction_id 
+          r1.original_transaction_id == r2.original_transaction_id
         end
-      
+
         def raw_grouped_receipts
           groups = {}
           total_receipts.each do |candy_receipt|
             added = false
             groups.each do |oti, receipts|
-              if same_group?(receipts.first, candy_receipt)        
+              if same_group?(receipts.first, candy_receipt)
                 receipts << candy_receipt
                 added = true
                 break
@@ -105,7 +109,7 @@ module CandyCheck
             end
             groups[candy_receipt.original_transaction_id] = [candy_receipt] unless added
           end
-      
+
           groups
         end
 
@@ -117,13 +121,13 @@ module CandyCheck
           @total_receipts += latest_receipt_info
           not_added_in_app_receipts = in_app.select { |r1| @total_receipts.find { |r2| same_receipts?(r1, r2)} == nil }
           @total_receipts += not_added_in_app_receipts if not_added_in_app_receipts.present?
-          
+
           @total_receipts
         end
 
         def same_receipts?(r1, r2)
           return r1.web_order_line_item_id == r2.web_order_line_item_id if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
-          
+
           # if receipts are non-renewing, then compare by transaction id
           r1.transaction_id == r2.transaction_id
         end
@@ -135,7 +139,7 @@ module CandyCheck
             t.original_transaction_id == oti || t.product_id == product_id
           end
         end
-        
+
         # @return [Unified::InAppReceipt] by original_transaction_id
         def latest_subscription_info(original_transaction_id)
           subscriptions.find { |s| s.original_transaction_id == original_transaction_id }
