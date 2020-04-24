@@ -31,9 +31,12 @@ module CandyCheck
         # @return [String] Enviroment
         attr_reader :environment
 
+        attr_reader :response
+
         # @param response [Hash] parsed response from apple
         #   verification server
         def initialize(response)
+          @response = response
           @receipt = AppReceipt.new(response['receipt'])
           @latest_receipt = response['latest_receipt']
           @latest_receipt_info = fetch_latest_receipt_info(response)
@@ -114,7 +117,6 @@ module CandyCheck
         end
 
         def total_receipts
-
           return @total_receipts if @total_receipts
 
           @total_receipts = []
