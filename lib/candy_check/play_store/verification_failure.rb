@@ -2,26 +2,30 @@ module CandyCheck
   module PlayStore
     # Represents a failing call against the Google API server
     class VerificationFailure
-      # @return [Google::Apis::Error] the raw attributes returned
-      # from the server
-      attr_reader :err
+      include Utils::AttributeReader
 
-      # Initializes a new instance which bases on a api client exception
-      # @param err [Google::Apis::Error]
-      def initialize(err)
-        @err = err
+      # @return [Hash] the raw attributes returned from the server
+      attr_reader :error
+
+      # Initializes a new instance which bases on a JSON result
+      # from Google API servers
+      # @param error [Hash]
+      def initialize(error)
+        @error = error
       end
 
       # The code of the failure
       # @return [Fixnum]
       def code
-        (err && err.status_code) || -1
+        Integer(error.status_code)
+      rescue
+        -1
       end
 
       # The message of the failure
       # @return [String]
       def message
-        (err && err.message) || 'Unknown error'
+        error.message || "Unknown error"
       end
     end
   end
