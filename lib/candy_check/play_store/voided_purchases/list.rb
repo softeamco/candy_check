@@ -68,7 +68,7 @@ module CandyCheck
       end
 
       def params
-        { kind: 1,
+        { type: 1,
           start_time: start_time,
           end_time: end_time,
           max_results: max_results,
