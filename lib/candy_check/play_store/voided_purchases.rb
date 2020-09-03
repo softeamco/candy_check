@@ -17,7 +17,6 @@ module CandyCheck
         list = CandyCheck::PlayStore::VoidedPurchases::List.new(
           package_name: package_name,
           authorization: @authorization,
-          kind: kind,
           start_time: start_time,
           end_time: end_time,
           max_results: max_results,
