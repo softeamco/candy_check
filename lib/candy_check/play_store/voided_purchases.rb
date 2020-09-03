@@ -6,7 +6,6 @@ module CandyCheck
       end
 
       def voided_purchases(package_name:,
-                           kind:,
                            start_time: nil,
                            end_time: nil,
                            max_results: nil,
