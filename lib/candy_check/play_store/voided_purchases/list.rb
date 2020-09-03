@@ -4,9 +4,6 @@ module CandyCheck
       # @return [String] the package_name which will be queried
       attr_reader :package_name
 
-      # @return [String] purchase type - product or subscription
-      attr_reader :kind
-
       attr_reader :start_time
       attr_reader :end_time
       attr_reader :max_results
@@ -26,7 +23,6 @@ module CandyCheck
       # @param sku [String]
       def initialize(package_name:,
                      authorization:,
-                     kind: :subscription,
                      start_time:,
                      end_time:,
                      max_results:,
@@ -37,7 +33,6 @@ module CandyCheck
                      options:)
         @package_name = package_name
         @authorization = authorization
-        @kind = TYPES_MAP[kind.to_sym]
         @start_time = start_time
         @end_time = end_time
         @max_results = max_results
@@ -49,15 +44,20 @@ module CandyCheck
       end
 
       def call
-        service = CandyCheck::PlayStore::AndroidPublisherService.new
-
-        service.authorization = @authorization
         service.list_purchase_voidedpurchases(package_name, **params) do |result, error|
           yield(purchases(result), pagination(result), error)
         end
       end
 
       private
+
+      def service
+        return @service if @service
+
+        @service = CandyCheck::PlayStore::AndroidPublisherService.new
+        @service.authorization = @authorization
+        @service
+      end
 
       def purchases(result)
         return [] unless result.voided_purchases
@@ -68,7 +68,7 @@ module CandyCheck
       end
 
       def params
-        { type: kind,
+        { kind: 1,
           start_time: start_time,
           end_time: end_time,
           max_results: max_results,
