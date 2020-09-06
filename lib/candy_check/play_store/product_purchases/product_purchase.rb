@@ -84,6 +84,12 @@ module CandyCheck
         def purchased_at
           Time.at(purchase_time_millis / 1000).utc.to_datetime
         end
+
+        # Get purchase type
+        # @return [Integer]
+        def purchase_type
+          @product_purchase.purchase_type
+        end
       end
     end
   end

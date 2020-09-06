@@ -165,6 +165,12 @@ module CandyCheck
         def order_id
           @subscription_purchase.order_id
         end
+
+        # Get purchase type
+        # @return [Integer]
+        def purchase_type
+          @subscription_purchase.purchase_type
+        end
       end
     end
   end
