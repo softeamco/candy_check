@@ -44,6 +44,12 @@ module CandyCheck
           false
         end
 
+        # see if in retry billing
+        # @return [bool]
+        def in_retry_billing?
+          Time.zone.now > expires_at && payment_state == PAYMENT_PENDING && auto_renewing?
+        end
+
         # see if payment is ok
         # @return [bool]
         def payment_received?
