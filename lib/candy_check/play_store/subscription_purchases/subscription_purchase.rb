@@ -177,6 +177,12 @@ module CandyCheck
         def purchase_type
           @subscription_purchase.purchase_type
         end
+
+        # Get original json
+        # @return [String]
+        def original_json
+          @subscription_purchase.to_json
+        end
       end
     end
   end

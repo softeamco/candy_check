@@ -90,6 +90,12 @@ module CandyCheck
         def purchase_type
           @product_purchase.purchase_type
         end
+
+        # Get original json
+        # @return [String]
+        def original_json
+          @product_purchase.to_json
+        end
       end
     end
   end
