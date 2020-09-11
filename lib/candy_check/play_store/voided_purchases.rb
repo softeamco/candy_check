@@ -8,7 +8,7 @@ module CandyCheck
       def voided_purchases(package_name:,
                            start_time: nil,
                            end_time: nil,
-                           max_results: nil,
+                           max_results: 5000,
                            start_index: nil,
                            token: nil,
                            fields: nil,

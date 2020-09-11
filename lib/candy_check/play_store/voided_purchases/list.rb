@@ -44,9 +44,9 @@ module CandyCheck
       end
 
       def call
-        service.list_purchase_voidedpurchases(package_name, **params) do |result, error|
-          yield(purchases(result), pagination(result), error)
-        end
+        result = service.list_purchase_voidedpurchases(package_name, **params)
+
+        purchases(result)
       end
 
       private
@@ -60,7 +60,7 @@ module CandyCheck
       end
 
       def purchases(result)
-        return [] unless result&.voided_purchases
+        return [] unless result.voided_purchases
 
         result.voided_purchases.map do |purchase|
           CandyCheck::PlayStore::VoidedPurchases::Purchase.new(purchase)
@@ -80,7 +80,7 @@ module CandyCheck
       end
 
       def pagination(result)
-        return unless result.page_info
+        return unless result&.page_info
 
         CandyCheck::PlayStore::VoidedPurchases::Pagination.new(
           page_info: result.page_info,
