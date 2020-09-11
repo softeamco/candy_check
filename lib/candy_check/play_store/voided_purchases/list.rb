@@ -60,7 +60,7 @@ module CandyCheck
       end
 
       def purchases(result)
-        return [] unless result.voided_purchases
+        return [] unless result&.voided_purchases
 
         result.voided_purchases.map do |purchase|
           CandyCheck::PlayStore::VoidedPurchases::Purchase.new(purchase)
