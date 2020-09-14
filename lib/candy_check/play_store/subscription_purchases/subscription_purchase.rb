@@ -44,7 +44,10 @@ module CandyCheck
           cycles = introductory_price_info&.introductory_price_cycles&.to_i
           return false unless cycles
 
-          cycles - 2 > order_id.match(/\.\.\w*$/).to_s.tr('..', '').to_i
+          index = order_id.split('..')[1]
+          real_index = index.nil? ? 1 : index.to_i + 2
+
+          cycles >= real_index
         end
 
         def introductory_price_info
