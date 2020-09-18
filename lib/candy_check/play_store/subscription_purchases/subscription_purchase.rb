@@ -36,6 +36,12 @@ module CandyCheck
           @subscription_purchase.promotion_type
         end
 
+        # Get promotion type
+        # @return [String]
+        def promotion_code
+          @subscription_purchase.promotion_code
+        end
+
         # Check if in trial. This is actually not given by Google, but we assume
         # that it is a trial going on if the paid amount is 0 and
         # renewal is activated.
