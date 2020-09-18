@@ -6,3 +6,4 @@ doc
 .ruby-version
 .nvimrc
 *.gem
+.idea

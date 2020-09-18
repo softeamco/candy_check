@@ -30,6 +30,12 @@ module CandyCheck
           overdue_days > 0
         end
 
+        # Get promotion type
+        # @return [Integer]
+        def promotion_type
+          @subscription_purchase.promotion_type
+        end
+
         # Check if in trial. This is actually not given by Google, but we assume
         # that it is a trial going on if the paid amount is 0 and
         # renewal is activated.
@@ -44,8 +50,7 @@ module CandyCheck
           cycles = introductory_price_info&.introductory_price_cycles&.to_i
           return false unless cycles
 
-          index = order_id.split('..')[1]
-          real_index = index.nil? ? 1 : index.to_i + 2
+          real_index = order_index.nil? ? 1 : order_index.to_i + 2
 
           cycles >= real_index
         end
@@ -192,6 +197,12 @@ module CandyCheck
         # @return [String]
         def original_json
           @subscription_purchase.to_json
+        end
+
+        private
+
+        def order_index
+          @order_index ||= order_id.split('..')[1]
         end
       end
     end
