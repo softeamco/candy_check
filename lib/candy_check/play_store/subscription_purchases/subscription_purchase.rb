@@ -52,19 +52,6 @@ module CandyCheck
           payment_state == 2
         end
 
-        def intro?
-          cycles = introductory_price_info&.introductory_price_cycles&.to_i
-          return false unless cycles
-
-          real_index = order_index.nil? ? 1 : order_index.to_i + 2
-
-          cycles >= real_index
-        end
-
-        def introductory_price_info
-          @subscription_purchase.introductory_price_info
-        end
-
         # see if in retry billing
         # @return [bool]
         def in_retry_billing?
@@ -204,8 +191,6 @@ module CandyCheck
         def original_json
           @subscription_purchase.to_json
         end
-
-        private
 
         def order_index
           @order_index ||= order_id.split('..')[1]
