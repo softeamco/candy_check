@@ -52,6 +52,10 @@ module CandyCheck
           payment_state == 2
         end
 
+        def introductory_price_info
+          @subscription_purchase.introductory_price_info
+        end
+
         # see if in retry billing
         # @return [bool]
         def in_retry_billing?
