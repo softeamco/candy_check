@@ -166,7 +166,7 @@ module CandyCheck
 
         def upgrade_with_full_refund?
           return false unless cancelled? && upgraded?
-          
+
           days_used = (cancellation_date.to_date - purchase_date.to_date).to_i
 
           days_used < 1
@@ -268,6 +268,18 @@ module CandyCheck
         # @return [Boolean]
         def price_consented?
           price_consent_status == 1
+        end
+
+        def in_app_ownership_type
+          read('in_app_ownership_type')
+        end
+
+        def family_shared?
+          in_app_ownership_type == 'FAMILY_SHARED'
+        end
+
+        def purchased?
+          in_app_ownership_type == 'PURCHASED'
         end
       end
     end
