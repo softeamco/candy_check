@@ -91,6 +91,18 @@ module CandyCheck
         read_datetime_from_string('expires_date')
       end
 
+      def in_app_ownership_type
+        read('in_app_ownership_type')
+      end
+
+      def family_shared?
+        in_app_ownership_type == 'FAMILY_SHARED'
+      end
+
+      def purchased?
+        in_app_ownership_type == 'PURCHASED'
+      end
+
       # rubocop:disable PredicateName
       def is_trial_period
         # rubocop:enable PredicateName
