@@ -69,7 +69,7 @@ module CandyCheck
         # group by subscription_group_identifier or by original_transaction_id or by product_id
         def grouped_receipts
           @grouped_receipts ||= raw_grouped_receipts.map do |id, receipts|
-            receipts = receipts.sort_by(&:purchase_date)
+            receipts.sort_by! { |r| r.expires_date || r.purchase_date }
             fix_receipts_order!(receipts) if receipts.last.upgraded? && receipts.last.cancelled?
 
             { id => receipts }
