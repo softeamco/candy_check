@@ -48,6 +48,10 @@ module CandyCheck
           read('promotional_offer_id')
         end
 
+        def offer_code_ref_name
+          read('offer_code_ref_name')
+        end
+
         def subscription_group_identifier
           read('subscription_group_identifier')
         end
