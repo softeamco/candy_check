@@ -70,19 +70,19 @@ module CandyCheck
         def grouped_receipts
           @grouped_receipts ||= raw_grouped_receipts.map do |id, receipts|
             receipts.sort_by! { |r| r.expires_date || r.purchase_date }
-            fix_receipts_order!(receipts) if receipts.last.upgraded? && receipts.last.cancelled?
+            fix_upgraded_receipts_order!(receipts) if receipts.last.upgraded?
 
             { id => receipts }
           end.reduce({}, :merge)
         end
 
-        def fix_receipts_order!(receipts)
+        def fix_upgraded_receipts_order!(receipts)
           return if receipts.count < 2
 
           last_receipt = receipts.last
           should_be_last_receipt = receipts[receipts.count - 2]
 
-          if (should_be_last_receipt.purchase_date - last_receipt.cancellation_date).abs < 10
+          if (should_be_last_receipt.purchase_date - last_receipt.purchase_date).abs < 86_400
             receipts.delete(should_be_last_receipt)
             receipts << should_be_last_receipt
           end
