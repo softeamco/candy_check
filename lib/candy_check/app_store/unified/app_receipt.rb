@@ -22,6 +22,12 @@ module CandyCheck
           read('bundle_id')
         end
 
+        # The app's app store id
+        # @return [String]
+        def app_item_id
+          read_integer('app_item_id')
+        end
+
         # The app version number
         # @return [String]
         def application_version
