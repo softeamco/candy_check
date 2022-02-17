@@ -1,8 +1,7 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'candy_check/version'
 
-# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name          = 'candy_check'
   spec.version       = CandyCheck::VERSION
@@ -21,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'google-api-client', '~> 0.43.0'
   spec.add_dependency 'multi_json',        '~> 1.10'
-  spec.add_dependency 'thor',              '~> 0.19'
+  spec.add_dependency 'thor',              '~> 1.1'
 
   spec.add_development_dependency 'bundler',         '~> 2.1.4'
   spec.add_development_dependency 'coveralls',       '~> 0.8'
@@ -34,5 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop',         '~> 0.48'
   spec.add_development_dependency 'timecop',         '~> 0.8'
   spec.add_development_dependency 'webmock',         '~> 3.0'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end
-# rubocop:enable Metrics/BlockLength
