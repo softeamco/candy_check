@@ -38,7 +38,8 @@ module CandyCheck
 
         def valid?
           return false unless @response[:result]
-          ok_kind = @response[:result].kind == "androidpublisher#subscriptionPurchase"
+
+          ok_kind = @response[:result].kind == 'androidpublisher#subscriptionPurchase'
           @response && @response[:result].expiry_time_millis && ok_kind
         end
 

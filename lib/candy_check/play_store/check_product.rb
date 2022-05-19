@@ -9,8 +9,8 @@ module CandyCheck
         in_app_product = CandyCheck::PlayStore::InAppProduct::Product.new(
           package_name: package_name,
           sku: sku,
-          authorization: @authorization,
-          )
+          authorization: @authorization
+        )
         in_app_product.call!
       end
     end

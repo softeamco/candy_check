@@ -22,8 +22,8 @@ module CandyCheck
           result = verifier.verify_product_purchase(
             package_name: @package,
             product_id: @product_id,
-            token: @token,
-            )
+            token: @token
+          )
           out.print "#{result.class}:"
           out.pretty result
         end
@@ -31,7 +31,7 @@ module CandyCheck
         private
 
         def authorization
-          CandyCheck::PlayStore.authorization(options["json_key_file"])
+          CandyCheck::PlayStore.authorization(options['json_key_file'])
         end
       end
     end

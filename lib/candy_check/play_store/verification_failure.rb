@@ -18,14 +18,14 @@ module CandyCheck
       # @return [Fixnum]
       def code
         Integer(error.status_code)
-      rescue
+      rescue StandardError
         -1
       end
 
       # The message of the failure
       # @return [String]
       def message
-        error.message || "Unknown error"
+        error.message || 'Unknown error'
       end
     end
   end

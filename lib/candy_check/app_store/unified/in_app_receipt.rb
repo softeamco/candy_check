@@ -110,7 +110,7 @@ module CandyCheck
         # @return [Integer, nil]
         #   0 - App Store has stopped attempting to renew the subscription
         #   1 - App Store is still attempting to renew the subscription
-        def is_in_billing_retry_period # rubocop:disable PredicateName
+        def is_in_billing_retry_period # rubocop:disable Naming/PredicateName
           read_integer('is_in_billing_retry_period')
         end
 
@@ -123,13 +123,13 @@ module CandyCheck
 
         # For a subscription, whether or not it is in the free trial period
         # @return [Boolean, nil]
-        def is_trial_period # rubocop:disable PredicateName
+        def is_trial_period # rubocop:disable Naming/PredicateName
           read_bool('is_trial_period')
         end
 
         # For a subscription, whether or not it is upgrared
         # @return [Boolean, nil]
-        def is_upgraded # rubocop:disable PredicateName
+        def is_upgraded # rubocop:disable Naming/PredicateName
           read_bool('is_upgraded')
         end
 
@@ -139,7 +139,7 @@ module CandyCheck
 
         # For a subscription, whether or not it is in the intro offer period
         # @return [Boolean, nil]
-        def is_intro_period # rubocop:disable PredicateName
+        def is_intro_period # rubocop:disable Naming/PredicateName
           read_bool('is_in_intro_offer_period')
         end
 

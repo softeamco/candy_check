@@ -60,9 +60,7 @@ module CandyCheck
       def fetch_receipt_information(receipt_data, secret = nil)
         default_endpoint, opposite_endpoint = endpoints
         result = call_for(default_endpoint, receipt_data, secret)
-        if should_retry?(result)
-          return call_for(opposite_endpoint, receipt_data, secret)
-        end
+        return call_for(opposite_endpoint, receipt_data, secret) if should_retry?(result)
 
         result
       end

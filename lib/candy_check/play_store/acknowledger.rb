@@ -10,7 +10,7 @@ module CandyCheck
           package_name: package_name,
           product_id: product_id,
           token: token,
-          authorization: @authorization,
+          authorization: @authorization
         )
         acknowledger.call!
       end

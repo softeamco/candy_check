@@ -103,9 +103,9 @@ module CandyCheck
         in_app_ownership_type == 'PURCHASED'
       end
 
-      # rubocop:disable PredicateName
+      # rubocop:disable Naming/PredicateName
       def is_trial_period
-        # rubocop:enable PredicateName
+        # rubocop:enable Naming/PredicateName
         read_bool('is_trial_period')
       end
     end

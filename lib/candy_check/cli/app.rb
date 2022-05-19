@@ -23,12 +23,12 @@ module CandyCheck
         Commands::AppStore.run(receipt, options)
       end
 
-      desc "play_store PACKAGE PRODUCT_ID TOKEN", "Verify PlayStore purchase"
+      desc 'play_store PACKAGE PRODUCT_ID TOKEN', 'Verify PlayStore purchase'
       method_option :json_key_file,
                     required: true,
                     type: :string,
-                    aliases: "-k",
-                    desc: "The json key file to use for API authentication"
+                    aliases: '-k',
+                    desc: 'The json key file to use for API authentication'
 
       def play_store(package, product_id, token)
         Commands::PlayStore.run(package, product_id, token, options)

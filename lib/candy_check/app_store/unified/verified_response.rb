@@ -89,12 +89,15 @@ module CandyCheck
         end
 
         def same_group?(r1, r2)
-
           # group by subscription_group_identifier if autorenewable
-          return r1.subscription_group_identifier == r2.subscription_group_identifier if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
+          if r1&.subscription_group_identifier.present? && r2&.subscription_group_identifier.present?
+            return r1.subscription_group_identifier == r2.subscription_group_identifier
+          end
 
           # group by product id or OTI if autorenewable but for some reason subscription_group_identifier is not available
-          return (r1.product_id == r2.product_id || r1.original_transaction_id == r2.original_transaction_id) if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+          if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+            return (r1.product_id == r2.product_id || r1.original_transaction_id == r2.original_transaction_id)
+          end
 
           r1.original_transaction_id == r2.original_transaction_id
         end
@@ -103,12 +106,12 @@ module CandyCheck
           groups = {}
           total_receipts.each do |candy_receipt|
             added = false
-            groups.each do |oti, receipts|
-              if same_group?(receipts.first, candy_receipt)
-                receipts << candy_receipt
-                added = true
-                break
-              end
+            groups.each do |_oti, receipts|
+              next unless same_group?(receipts.first, candy_receipt)
+
+              receipts << candy_receipt
+              added = true
+              break
             end
             groups[candy_receipt.original_transaction_id] = [candy_receipt] unless added
           end
@@ -121,14 +124,16 @@ module CandyCheck
 
           @total_receipts = []
           @total_receipts += latest_receipt_info
-          not_added_in_app_receipts = in_app.select { |r1| @total_receipts.find { |r2| same_receipts?(r1, r2)} == nil }
+          not_added_in_app_receipts = in_app.select { |r1| @total_receipts.find { |r2| same_receipts?(r1, r2) }.nil? }
           @total_receipts += not_added_in_app_receipts if not_added_in_app_receipts.present?
 
           @total_receipts
         end
 
         def same_receipts?(r1, r2)
-          return r1.web_order_line_item_id == r2.web_order_line_item_id if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+          if r1.web_order_line_item_id.present? && r2.web_order_line_item_id.present?
+            return r1.web_order_line_item_id == r2.web_order_line_item_id
+          end
 
           # if receipts are non-renewing, then compare by transaction id
           r1.transaction_id == r2.transaction_id
