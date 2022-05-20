@@ -1,7 +1,7 @@
 module CandyCheck
   module PlayStore
     # Describes a successfully validated subscription
-    module VoidedPurchases
+    class VoidedPurchases
       class Purchase
         include Utils::AttributeReader
 

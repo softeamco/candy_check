@@ -1,6 +1,6 @@
 module CandyCheck
   module PlayStore
-    module VoidedPurchases
+    class VoidedPurchases
       class Pagination
         # @return [String] General pagination information
         attr_reader :page_info

@@ -1,6 +1,6 @@
 module CandyCheck
   module PlayStore
-    module VoidedPurchases
+    class VoidedPurchases
       class List
         # @return [String] the package_name which will be queried
         attr_reader :package_name
