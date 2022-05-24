@@ -29,14 +29,14 @@ module CandyCheck
             if error_data&.message == 'Invalid request'
               monetization_subscription!
             else
-              @response = { result: result, error_data: error_data, subscription: false }
+              @response = { result: result, error_data: error_data }
             end
           end
         end
 
         def monetization_subscription!
           service.get_monetization_subscription(package_name, sku) do |result, error_data|
-            @response = { result: result, error_data: error_data, subscription: true }
+            @response = { result: result, error_data: error_data }
           end
         end
       end
