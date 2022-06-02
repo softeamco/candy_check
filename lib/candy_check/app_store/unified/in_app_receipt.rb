@@ -285,6 +285,10 @@ module CandyCheck
         def purchased?
           in_app_ownership_type == 'PURCHASED'
         end
+
+        def app_account_token
+          read('app_account_token')
+        end
       end
     end
   end
