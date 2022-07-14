@@ -279,6 +279,10 @@ module CandyCheck
           price_consent_status == 1
         end
 
+        def price_increase_agreed?
+          price_increase_status == 1
+        end
+
         def in_app_ownership_type
           read('in_app_ownership_type')
         end
