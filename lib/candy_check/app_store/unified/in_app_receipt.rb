@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 module CandyCheck
   module AppStore
     module Unified
@@ -259,6 +260,10 @@ module CandyCheck
           read_integer('price_consent_status')
         end
 
+        def price_increase_status
+          read_integer('price_increase_status')
+        end
+
         PRICE_CONSENTS_STATUS = {
           1 => 'ignore_price_increase',
           0 => 'agreed_price_increase'
@@ -293,3 +298,4 @@ module CandyCheck
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
