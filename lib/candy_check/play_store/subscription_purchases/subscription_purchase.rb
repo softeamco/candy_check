@@ -190,6 +190,10 @@ module CandyCheck
           @subscription_purchase.purchase_type
         end
 
+        def obfuscated_external_account_id
+          @subscription_purchase.obfuscated_external_account_id
+        end
+
         # Get original json
         # @return [String]
         def original_json
