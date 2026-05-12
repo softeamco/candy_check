@@ -298,6 +298,44 @@ module CandyCheck
         def app_account_token
           read('app_account_token')
         end
+
+        def billing_plan_type
+          return @billing_plan_type if defined?(@billing_plan_type)
+
+          value = read('billing_plan_type')
+          @billing_plan_type = (value.downcase if value)
+        end
+
+        def commitment_info
+          return @commitment_info if defined?(@commitment_info)
+
+          @commitment_info = read('commitment_info')
+        end
+
+        def commitment_billing_period_number
+          return @commitment_billing_period_number if defined?(@commitment_billing_period_number)
+
+          @commitment_billing_period_number = (commitment_info['billingPeriodNumber'] if commitment_info)
+        end
+
+        def commitment_total_billing_periods
+          return @commitment_total_billing_periods if defined?(@commitment_total_billing_periods)
+
+          @commitment_total_billing_periods = (commitment_info['totalBillingPeriods'] if commitment_info)
+        end
+
+        def commitment_expires_date
+          return @commitment_expires_date if defined?(@commitment_expires_date)
+
+          value = commitment_info['commitmentExpiresDate'] if commitment_info
+          @commitment_expires_date = (Time.at(value / 1000).utc.to_datetime if value)
+        end
+
+        def commitment_price
+          return @commitment_price if defined?(@commitment_price)
+
+          @commitment_price = (commitment_info['commitmentPrice'] if commitment_info)
+        end
       end
     end
   end
